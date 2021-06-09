@@ -1,11 +1,12 @@
 package bruno.rodrigues.agenda.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import bruno.rodrigues.agenda.R;
@@ -29,10 +30,11 @@ public class FormularioAlunoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_aluno);
-
         inicializacaoDosCampos();
-        configuraBotaoSalvarAluno();
+        carregaAluno();
+    }
 
+    private void carregaAluno() {
         Intent dados = getIntent();
         if(dados.hasExtra(CHAVE_ALUNO)) {
             setTitle(TITULO_APPBAR_EDITA_ALUNO);
@@ -44,29 +46,37 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_menu_salvar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.menu_salvar){
+            finalizaFormulario();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void preencheCampo() {
         campoNome.setText(aluno.getNome());
         campoTelefone.setText(aluno.getTelefone());
         campoEmail.setText(aluno.getEmail());
     }
 
-    private void configuraBotaoSalvarAluno() {
-        Button botaoSalvar = findViewById(R.id.formulario_aluno_botao_salvar);
-        botaoSalvar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Aluno alunoCriado = criaAluno();
-                //salva(alunoCriado);
-                preencheAluno();
-                if(aluno.temId()) {
-                    dao.editar(aluno);
-                }else{
-                    dao.salvar(aluno);
-                }
-                finish();
 
-            }
-        });
+    private void finalizaFormulario() {
+        preencheAluno();
+        if(aluno.temId()) {
+            dao.editar(aluno);
+        }else{
+            dao.salvar(aluno);
+        }
+        finish();
     }
 
     private void preencheAluno() {

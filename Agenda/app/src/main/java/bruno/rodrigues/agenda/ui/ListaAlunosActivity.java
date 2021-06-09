@@ -3,11 +3,14 @@ package bruno.rodrigues.agenda.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,6 +28,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
     private static final String TITULO_APPBAR = "Lista de alunos";
     AlunoDAO dao = new AlunoDAO();
+    private ArrayAdapter<Aluno> adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +37,28 @@ public class ListaAlunosActivity extends AppCompatActivity {
 
         setTitle(TITULO_APPBAR);
         configuraBotaoAdicionarAluno();
+        listaAlunos();
+        dao.salvar(new Aluno("Bruno", "83","bruno@gmail.com"));
+        dao.salvar(new Aluno("Juciara", "81","juciara@gmail.com"));
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.activity_lista_aluno_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.menu_remover) {
+            AdapterView.AdapterContextMenuInfo menuInfo =
+                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
+            removeAluno(alunoEscolhido);
+        }
+        return super.onContextItemSelected(item);
     }
 
     private void configuraBotaoAdicionarAluno() {
@@ -41,7 +66,6 @@ public class ListaAlunosActivity extends AppCompatActivity {
         botaoNovoAluno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 abreFormularioAluno();
 
             }
@@ -60,7 +84,9 @@ public class ListaAlunosActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        listaAlunos();
+        adapter.clear();
+        adapter.addAll(dao.todos());
+
 
     }
 
@@ -69,15 +95,13 @@ public class ListaAlunosActivity extends AppCompatActivity {
         List<Aluno> alunos = dao.todos();
         configuraAdapter(listaDeAlunos, alunos);
         configuraListenerClickItem(listaDeAlunos);
+        registerForContextMenu(listaDeAlunos);
+    }
 
-        listaDeAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Aluno alunoEscolhido = (Aluno) parent.getItemAtPosition(position);
-                dao.remove(alunoEscolhido);
-                return true;
-            }
-        });
+
+    private void removeAluno(Aluno alunoEscolhido) {
+        dao.remove(alunoEscolhido);
+        adapter.remove(alunoEscolhido);
     }
 
     private void configuraListenerClickItem(ListView listaDeAlunos) {
@@ -91,8 +115,11 @@ public class ListaAlunosActivity extends AppCompatActivity {
     }
 
     private void configuraAdapter(ListView listaDeAlunos, List<Aluno> alunos) {
-        listaDeAlunos.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1,
-                alunos));
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_expandable_list_item_1,
+                alunos);
+        listaDeAlunos.setAdapter(adapter);
+
     }
 
     private void abreFormularioEditaAluno(Aluno alunoEscolhido) {
