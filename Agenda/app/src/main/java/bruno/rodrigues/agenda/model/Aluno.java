@@ -1,5 +1,7 @@
 package bruno.rodrigues.agenda.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public class Aluno implements Serializable {
@@ -49,6 +51,7 @@ public class Aluno implements Serializable {
         this.email = email;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return nome;

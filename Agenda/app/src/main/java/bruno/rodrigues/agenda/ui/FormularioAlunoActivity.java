@@ -19,7 +19,7 @@ public class FormularioAlunoActivity extends AppCompatActivity {
 
     private static final String TITULO_APPBAR_NOVO_ALUNO = "Novo aluno";
     private static final String TITULO_APPBAR_EDITA_ALUNO = "Editar aluno";
-    AlunoDAO dao = new AlunoDAO();
+    final AlunoDAO dao = new AlunoDAO();
     private Aluno aluno;
 
     private EditText campoNome;
