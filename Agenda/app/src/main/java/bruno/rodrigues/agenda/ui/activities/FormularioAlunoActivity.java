@@ -1,4 +1,4 @@
-package bruno.rodrigues.agenda.ui;
+package bruno.rodrigues.agenda.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,7 @@ import bruno.rodrigues.agenda.R;
 import bruno.rodrigues.agenda.dao.AlunoDAO;
 import bruno.rodrigues.agenda.model.Aluno;
 
-import static bruno.rodrigues.agenda.ui.ConstantesActivities.CHAVE_ALUNO;
+import static bruno.rodrigues.agenda.ui.activities.ConstantesActivities.CHAVE_ALUNO;
 
 public class FormularioAlunoActivity extends AppCompatActivity {
 

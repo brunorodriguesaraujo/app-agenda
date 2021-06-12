@@ -1,4 +1,4 @@
-package bruno.rodrigues.agenda.ui;
+package bruno.rodrigues.agenda.ui.activities;
 
 public interface ConstantesActivities {
 

@@ -12,14 +12,14 @@
         android:theme="@style/Theme.Agenda"
         android:name=".AgendaApplication"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.ListaAlunosActivity">
+        <activity android:name=".ui.activities.ListaAlunosActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.FormularioAlunoActivity"/>
+        <activity android:name=".ui.activities.FormularioAlunoActivity"/>
 
     </application>
 
